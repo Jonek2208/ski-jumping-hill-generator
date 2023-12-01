@@ -1,8 +1,6 @@
 #pragma once
 
 #include <vector>
-#include <string>
-
 #include "osj_math.hpp"
 
 struct Mesh
@@ -11,16 +9,17 @@ struct Mesh
     std::vector<osj::vec3> normals;
     std::vector<int> triangles;
     std::vector<osj::vec2> uvs;
-    int subMeshCount;
-    std::vector<int> &GetTriangles(int material) const;
 };
 
-struct Material
+class MeshExporter
 {
-    std::string name;
-};
+private:
+    int current_index = 0;
+    std::vector<Mesh> meshes;
+    void mesh2obj(std::ostream &os, const Mesh &mesh);
 
-struct MeshFilter
-{
-    Mesh *sharedMesh;
+public:
+    MeshExporter &operator<<(const Mesh &mesh);
+    MeshExporter &operator<<(Mesh &&mesh);
+    void write(std::ostream &os);
 };
