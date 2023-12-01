@@ -165,6 +165,7 @@ double Hill::lhill_width(double x) const
 std::vector<osj::vec2> Hill::generate_lhill_points(int accuracy) const
 {
     std::vector<osj::vec2> points{};
+    points.reserve(X.magnitude() * 1.005);
 
     double distance = 0.0;
     int meter = 0;
@@ -198,11 +199,14 @@ std::vector<osj::vec2> Hill::generate_lhill_points(int accuracy) const
 
 std::vector<osj::vec2> Hill::generate_inrun_points() const
 {
-    std::vector<osj::vec2> points{T};
+    std::vector<osj::vec2> points;
+    int segments = (int)(inrun.l);
+    points.reserve(segments + 4);
+    points.push_back(T);
 
     // add points between E2 and E1 (inclusive)
     double delta = E1.x - E2.x;
-    int segments = (int)(inrun.l);
+
     for (size_t i = 0; i <= segments; i++)
     {
         points.emplace_back(i * delta / segments + E2.x, inrun_height(i * delta / segments + E2.x));

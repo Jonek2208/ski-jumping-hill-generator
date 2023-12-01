@@ -3,6 +3,7 @@
 
 void MeshExporter::mesh2obj(std::ostream &os, const Mesh &mesh)
 {
+    os << "o " << mesh.name << "\n";
     for (auto v : mesh.vertices)
     {
         os << "v " << v.x << " " << v.y << " " << -v.z << "\n";
@@ -33,12 +34,6 @@ void MeshExporter::mesh2obj(std::ostream &os, const Mesh &mesh)
     }
 
     current_index += mesh.vertices.size();
-}
-
-MeshExporter &MeshExporter::operator<<(const Mesh &mesh)
-{
-    meshes.emplace_back(mesh);
-    return *this;
 }
 
 MeshExporter &MeshExporter::operator<<(Mesh &&mesh)

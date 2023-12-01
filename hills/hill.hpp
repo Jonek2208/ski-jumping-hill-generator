@@ -12,7 +12,7 @@ enum class ProfileType
 
 struct ProfileData
 {
-    std::string name = "";
+    std::string name;
     ProfileType type;
 
     int gates;
