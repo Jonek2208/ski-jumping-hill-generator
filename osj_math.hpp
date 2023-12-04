@@ -89,6 +89,8 @@ namespace osj
         void set_y(double y) { m_y = y; }
         void set_z(double z) { m_z = z; }
         void set_w(double w) { m_w = w; }
+        vec3 euler_angles() const;
+        Quaternion inverse() const;
         friend vec3 operator*(const Quaternion &q, const vec3 &v) noexcept;
     };
 
