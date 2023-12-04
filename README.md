@@ -19,7 +19,7 @@ Program generates ski jumping hill model in wavefront .obj format using xml inpu
 ## hill
 attributes:
 - `id: string` - hill name
-- `profile-type: ICR1992 | ICR1996 | ICR2008` - hill profile type
+- `profile-type: 0 | 1 | 2` - hill profile type (default 0)
 
 ### inrun
 attributes:
