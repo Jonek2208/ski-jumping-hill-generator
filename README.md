@@ -2,18 +2,8 @@
 
 Program generates ski jumping hill model in wavefront .obj format using xml input.
 
+![image](https://github.com/Jonek2208/ski-jumping-hill-generator/assets/27452659/d78437b8-7dbe-4c2a-8d72-c9a152433e80)
 
-
-# Xml example
-
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<hill id="Zakopane HS105" profile-type="ICR2008">
-    <inrun gates="35" e="91.57" es="17.94" r1="94" t="6.45" gamma="35" alpha="10.5" b1="2.8"/>
-    <landinghill w="95" hs="105" h="44.64" n="82.7" s="2.36" l1="10" l2="10" rl="210" r2l="120" r2="90" beta0="5.83333349" betap="35" betak="32.5" betal="29.75" b2="7.0" bk="19.0" bu="21.0"/>
-    <outrun a="100" ra="0" betaa="0"/>
-</hill>
-```
 
 # Nodes
 ## hill
