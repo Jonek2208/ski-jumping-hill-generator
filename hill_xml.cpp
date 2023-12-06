@@ -127,8 +127,28 @@ namespace osj
                     node.attribute(xml::sz).as_double(1)};
     }
 
-    // RefPoint parse_ref_point(const pugi::xml_node &node)
-    // {
-    //     RefPoint res;
-    // }
+    Transform parse_transform(const pugi::xml_node &node)
+    {
+        return Transform(parse_position(node), parse_rotation(node), parse_scale(node));
+    }
+
+    RefPoint parse_ref_point(const pugi::xml_node &node)
+    {
+        return RefPoint(node.attribute(xml::id).as_string(),
+                        node.attribute(xml::ref_id).as_string(),
+                        parse_transform(node));
+    }
+
+    HillsMap parse_hills_map(const pugi::xml_document &doc)
+    {
+        HillsMap map;
+        pugi::xml_node map_node = doc.child(xml::map);
+        for (const auto &node : map_node.children("hill"))
+        {
+            RefPoint anchor = parse_ref_point(node.child(xml::anchor));
+
+            map.add_hill({{parse_hill_node(node)}, parse_transform(node), anchor});
+        }
+        return map;
+    }
 }

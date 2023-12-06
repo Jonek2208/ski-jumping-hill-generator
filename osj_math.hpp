@@ -73,26 +73,50 @@ namespace osj
     class Quaternion
     {
     private:
-        double m_x, m_y, m_z, m_w;
+        double m_w, m_x, m_y, m_z;
 
     public:
         static const Quaternion identity;
 
     public:
-        Quaternion(double x, double y, double z, double w) : m_x(x), m_y(y), m_z(z), m_w(w) {}
+        Quaternion(double w, double x, double y, double z) : m_w(w), m_x(x), m_y(y), m_z(z) {}
+        Quaternion(vec3 _euler_angles);
+        double w() const { return m_w; }
         double x() const { return m_x; }
         double y() const { return m_y; }
         double z() const { return m_z; }
-        double w() const { return m_w; }
 
+        void set_w(double w) { m_w = w; }
         void set_x(double x) { m_x = x; }
         void set_y(double y) { m_y = y; }
         void set_z(double z) { m_z = z; }
-        void set_w(double w) { m_w = w; }
         vec3 euler_angles() const;
         Quaternion inverse() const;
         friend vec3 operator*(const Quaternion &q, const vec3 &v) noexcept;
+        friend std::ostream &operator<<(std::ostream &os, const Quaternion &q) noexcept;
+        friend Quaternion operator*(const Quaternion &a, const Quaternion &b) noexcept;
     };
 
+    std::ostream &operator<<(std::ostream &os, const Quaternion &q) noexcept;
     vec3 operator*(const Quaternion &q, const vec3 &v) noexcept;
+    Quaternion operator*(const Quaternion &a, const Quaternion &b) noexcept;
+
+    struct Transform
+    {
+        vec3 position;
+        Quaternion rotation;
+        vec3 scale;
+
+        Transform(vec3 _pos, Quaternion _rot, vec3 _scale);
+        Transform(vec3 _pos, vec3 _rot, vec3 _scale);
+        Transform(const Transform &t) = default;
+
+        vec3 euler_angles() const { return rotation.euler_angles(); }
+        Transform inverse() const;
+        vec3 transform_point(const vec3 &v) const;
+        static const Transform identity;
+    };
+
+    Transform operator* (const Transform& t, const Transform &parent);
+
 }

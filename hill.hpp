@@ -57,12 +57,9 @@ namespace osj
         vec2 m_normal;
 
     public:
-        AngleData(double angle, bool degrees = false)
-        {
-            m_radians = (degrees ? deg2rad(angle) : angle);
-            m_tangent = from_radians(m_radians);
-            m_normal = m_tangent.perp();
-        }
+        AngleData(double angle, bool degrees = false) : m_radians(degrees ? deg2rad(angle) : angle),
+                                                        m_tangent(from_radians(m_radians)),
+                                                        m_normal(m_tangent.perp()) {}
 
         vec2 normal() const noexcept { return m_normal; }
         vec2 tangent() const noexcept { return m_tangent; }
@@ -71,6 +68,7 @@ namespace osj
     class Hill
     {
     private:
+        std::string m_name;
         ProfileType m_profile_type;
         vec2 A, B, C1, C2, CL, CV, E1, E2, T, F, P, K, L, U, V, X;
         double m_gamma, m_alpha, m_beta_0, m_beta_k, m_beta_p, m_beta_l, m_beta_a;
@@ -105,6 +103,7 @@ namespace osj
 
     public:
         Hill(const ProfileData &pd);
+        const std::string &name() const;
         double inrun_height(double x) const;
         double inrun_width() const;
         double lhill_height(double x) const;
@@ -112,5 +111,8 @@ namespace osj
         std::vector<vec2> generate_lhill_points(int accuracy = 1000) const;
         std::vector<vec2> generate_inrun_points() const;
         vec2 gate_point(int nr);
+
+        vec2 point_U() const;
+        vec2 point_T() const;
     };
 }

@@ -5,6 +5,6 @@
 
 namespace osj
 {
-    Mesh generate_inrun_mesh(const Hill &hill);
-    Mesh generate_lhill_mesh(const Hill &hill);
+    Mesh generate_inrun_mesh(const Hill &hill, const Transform &t=Transform::identity);
+    Mesh generate_lhill_mesh(const Hill &hill, const Transform &t=Transform::identity);
 }
