@@ -3,6 +3,7 @@
 
 #include "pugi/pugixml.hpp"
 #include "hill.hpp"
+#include "hills_map.hpp"
 
 namespace osj
 {
@@ -72,33 +73,7 @@ namespace osj
     vec3 parse_position(const pugi::xml_node &node);
     vec3 parse_rotation(const pugi::xml_node &node);
     vec3 parse_scale(const pugi::xml_node &node);
-
-    struct SerializableTransform
-    {
-        vec3 position;
-        Quaternion rotation;
-        vec3 scale;
-
-        vec3 euler_angles() const { return rotation.euler_angles(); }
-
-        SerializableTransform inverse() const
-        {
-            return {-position, rotation.inverse(), -scale};
-        }
-    };
-
-    struct RefPoint
-    {
-        std::string id;
-        std::string referenceId;
-        SerializableTransform value;
-        std::vector<RefPoint *> auxiliaryRefs; 
-    };
-
-    struct MapHillData
-    {
-        RefPoint anchor;
-        RefPoint ref_transform;
-        ProfileData profile_data;
-    };
+    Transform parse_transform(const pugi::xml_node &node);
+    RefPoint parse_ref_point(const pugi::xml_node &node);
+    HillsMap parse_hills_map(const pugi::xml_document &doc);
 }

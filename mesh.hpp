@@ -17,7 +17,7 @@ namespace osj
         Mesh &operator=(const Mesh &) = delete;
         Mesh(Mesh &&) = default;
         Mesh &operator=(Mesh &&) = default;
-        Mesh(std::string _name = "mesh") : name(_name) {}
+        Mesh(std::string _name = "mesh") : name(_name), vertices(), normals(), triangles(), uvs() {}
     };
 
     class MeshExporter
@@ -28,7 +28,7 @@ namespace osj
         void mesh2obj(std::ostream &os, const Mesh &mesh);
 
     public:
-        // MeshExporter &operator<<(const Mesh &mesh);
+        MeshExporter() : meshes() {}
         MeshExporter &operator<<(Mesh &&mesh);
         void write(std::ostream &os);
     };

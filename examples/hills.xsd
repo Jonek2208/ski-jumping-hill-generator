@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="map">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="hill" type="hill" maxOccurs="unbounded" minOccurs="1" />
+        <xs:element name="ref-point" type="ref-point" maxOccurs="unbounded" minOccurs="0" />
+        <xs:element name="path" type="path" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element name="construction" type="construction" minOccurs="0" maxOccurs="unbounded" />
+      </xs:sequence>
+      <xs:attribute name="lat" type="xs:decimal" />
+      <xs:attribute name="lon" type="xs:decimal" />
+      <xs:attribute name="alt" type="xs:decimal" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:attributeGroup name="position">
+    <xs:attribute name="x" type="xs:decimal" default="0" use="optional" />
+    <xs:attribute name="y" type="xs:decimal" default="0" use="optional" />
+    <xs:attribute name="z" type="xs:decimal" default="0" use="optional" />
+  </xs:attributeGroup>
+  <xs:attributeGroup name="rotation">
+    <xs:attribute name="rx" type="xs:decimal" default="0" use="optional" />
+    <xs:attribute name="ry" type="xs:decimal" default="0" use="optional" />
+    <xs:attribute name="rz" type="xs:decimal" default="0" use="optional" />
+  </xs:attributeGroup>
+  <xs:attributeGroup name="scale">
+    <xs:attribute name="sx" type="xs:decimal" default="1" use="optional" />
+    <xs:attribute name="sy" type="xs:decimal" default="1" use="optional" />
+    <xs:attribute name="sz" type="xs:decimal" default="1" use="optional" />
+  </xs:attributeGroup>
+
+  <xs:attributeGroup name="transform">
+    <xs:attribute name="ref-id" type="xs:string" default="" use="optional" />
+    <xs:attributeGroup ref="position" />
+    <xs:attributeGroup ref="rotation" />
+    <xs:attributeGroup ref="scale" />
+  </xs:attributeGroup>
+
+  <xs:complexType name="anonymous-ref-point">
+    <xs:attributeGroup ref="transform" />
+  </xs:complexType>
+
+  <xs:attributeGroup name="ref-point-attrs">
+    <xs:attribute name="id" type="xs:string" use="required"></xs:attribute>
+    <xs:attributeGroup ref="transform"></xs:attributeGroup>
+  </xs:attributeGroup>
+
+  <xs:complexType name="ref-point">
+    <xs:sequence>
+      <xs:element name="aux" type="anonymous-ref-point" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attributeGroup ref="ref-point-attrs" />
+  </xs:complexType>
+
+  <xs:attributeGroup name="node-attrs">
+    <xs:attribute name="ref-id" type="xs:string" default="" use="optional" />
+    <xs:attributeGroup ref="position" />
+  </xs:attributeGroup>
+
+  <xs:complexType name="line-node">
+    <xs:attributeGroup ref="node-attrs" />
+  </xs:complexType>
+
+  <xs:complexType name="bezier2-node">
+    <xs:sequence>
+      <xs:element name="c0" type="anonymous-ref-point" />
+    </xs:sequence>
+    <xs:attributeGroup ref="node-attrs" />
+  </xs:complexType>
+
+  <xs:complexType name="bezier3-node">
+    <xs:sequence>
+      <xs:element name="c0" type="anonymous-ref-point" />
+      <xs:element name="c1" type="anonymous-ref-point" />
+    </xs:sequence>
+    <xs:attributeGroup ref="node-attrs" />
+  </xs:complexType>
+
+  <xs:complexType name="arc-node">
+    <xs:sequence>
+      <xs:element name="c0" type="anonymous-ref-point" />
+    </xs:sequence>
+    <xs:attributeGroup ref="node-attrs" />
+  </xs:complexType>
+
+  <xs:complexType name="path-node">
+    <xs:attribute name="id"></xs:attribute>
+    <xs:attributeGroup ref="node-attrs" />
+  </xs:complexType>
+
+  <xs:complexType name="path">
+    <xs:sequence>
+      <xs:element name="path" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:attribute name="id" type="xs:string" use="required" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="line" type="line-node" minOccurs="0" maxOccurs="unbounded" />
+      <xs:element name="bezier2" type="bezier2-node" minOccurs="0" maxOccurs="unbounded" />
+      <xs:element name="bezier3" type="bezier3-node" minOccurs="0" maxOccurs="unbounded" />
+      <xs:element name="arc" type="arc-node" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attributeGroup ref="ref-point-attrs" />
+  </xs:complexType>
+
+  <xs:complexType name="construction">
+    <xs:sequence>
+      <xs:element name="center-path" type="anonymous-ref-point" />
+      <xs:element name="bl-path" type="anonymous-ref-point" />
+      <xs:element name="br-path" type="anonymous-ref-point" />
+      <xs:element name="tl-path" type="anonymous-ref-point" />
+      <xs:element name="tr-path" type="anonymous-ref-point" />
+    </xs:sequence>
+    <xs:attribute name="t0" />
+    <xs:attribute name="t1" />
+    <xs:attribute name="count" />
+    <xs:attribute name="step" />
+    <xs:attribute name="length" />
+    <xs:attribute name="material" />
+    <xs:attributeGroup ref="transform" />
+  </xs:complexType>
+
+  <xs:complexType name="hill">
+    <xs:sequence>
+      <xs:element name="anchor" type="anonymous-ref-point" />
+      <xs:element name="inrun">
+        <xs:complexType>
+          <xs:attribute name="gates" type="xs:unsignedInt" use="required" />
+          <xs:attribute name="e" type="xs:decimal" use="required" />
+          <xs:attribute name="es" type="xs:decimal" use="required" />
+          <xs:attribute name="r1" type="xs:decimal" use="required" />
+          <xs:attribute name="t" type="xs:decimal" use="required" />
+          <xs:attribute name="gamma" type="xs:decimal" use="required" />
+          <xs:attribute name="alpha" type="xs:decimal" use="required" />
+          <xs:attribute name="b1" type="xs:decimal" use="required" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="landing-hill">
+        <xs:complexType>
+          <xs:attribute name="w" type="xs:decimal" use="required" />
+          <xs:attribute name="hs" type="xs:decimal" use="required" />
+          <xs:attribute name="h" type="xs:decimal" use="required" />
+          <xs:attribute name="n" type="xs:decimal" use="required" />
+          <xs:attribute name="s" type="xs:decimal" use="required" />
+          <xs:attribute name="l1" type="xs:decimal" use="optional" />
+          <xs:attribute name="l2" type="xs:decimal" use="optional" />
+          <xs:attribute name="rL" type="xs:decimal" use="optional" />
+          <xs:attribute name="r2L" type="xs:decimal" use="optional" />
+          <xs:attribute name="r2" type="xs:decimal" use="required" />
+          <xs:attribute name="beta0" type="xs:decimal" use="required" />
+          <xs:attribute name="betaP" type="xs:decimal" use="optional" />
+          <xs:attribute name="betaK" type="xs:decimal" use="required" />
+          <xs:attribute name="betaL" type="xs:decimal" use="optional" />
+          <xs:attribute name="betaU" type="xs:decimal" use="optional" default="0" />
+          <xs:attribute name="b2" type="xs:decimal" use="required" />
+          <xs:attribute name="bK" type="xs:decimal" use="required" />
+          <xs:attribute name="bU" type="xs:decimal" use="required" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="outrun">
+        <xs:complexType>
+          <xs:attribute name="a" type="xs:decimal" use="required" />
+          <xs:attribute name="rA" type="xs:decimal" use="optional" default="0" />
+          <xs:attribute name="betaA" type="xs:decimal" use="optional" default="0" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="judges-tower">
+
+      </xs:element>
+    </xs:sequence>
+    <xs:attributeGroup ref="ref-point-attrs" />
+    <xs:attribute name="profile-type" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:unsignedInt">
+          <xs:minInclusive value="0" />
+          <xs:maxInclusive value="2" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:complexType>
+</xs:schema>

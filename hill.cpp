@@ -1,7 +1,7 @@
 #include "hill.hpp"
 namespace osj
 {
-    Hill::Hill(const ProfileData &pd) : m_profile_type(pd.type), m_alpha(deg2rad(pd.alpha)), m_gamma(deg2rad(pd.gamma)),
+    Hill::Hill(const ProfileData &pd) : m_name(pd.name), m_profile_type(pd.type), m_alpha(deg2rad(pd.alpha)), m_gamma(deg2rad(pd.gamma)),
                                         m_beta_0(deg2rad(pd.beta0)), m_beta_p(deg2rad(pd.betaP)),
                                         m_beta_k(deg2rad(pd.betaK)), m_beta_l(deg2rad(pd.betaL)), m_beta_a(deg2rad(pd.betaA)),
                                         m_e2_data(-m_alpha), m_e1_data(-m_gamma), m_f_data(-m_beta_0), m_p_data(-m_beta_p), m_k_data(-m_beta_k),
@@ -86,6 +86,11 @@ namespace osj
             V = U;
             X = U + vec2{m_a, 0};
         }
+    }
+
+    const std::string &Hill::name() const
+    {
+        return m_name;
     }
 
     double Hill::inrun_height(double x) const
@@ -221,5 +226,15 @@ namespace osj
     vec2 Hill::gate_point(int nr)
     {
         return (A - B) * (nr - 1) / (m_gates - 1) + B;
+    }
+
+    vec2 Hill::point_U() const
+    {
+        return U;
+    }
+
+    vec2 Hill::point_T() const
+    {
+        return T;
     }
 }
